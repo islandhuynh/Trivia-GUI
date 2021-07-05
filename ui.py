@@ -32,6 +32,7 @@ class QuizInterface:
     self.window.mainloop()
 
   def get_next_question(self):
+    self.question_window.config(bg="white")
     q_text = self.quiz.next_question()
     if q_text: 
       self.question_window.itemconfig(self.question_text, text=q_text)
@@ -50,11 +51,10 @@ class QuizInterface:
 
   def display_choice_feedback(self, is_correct):
     if is_correct:
-      self.window.after(0, self.question_window.configure(bg="green"))
+      self.question_window.config(bg="green")
       self.score_label.config(text=f"Score: {self.quiz.score}")
     else:
-      self.window.after(0, self.question_window.configure(bg="red"))
-    self.window.after(500, self.question_window.configure(bg="blue"))
-    self.get_next_question()
+      self.question_window.config(bg="red")
+    self.window.after(1000, self.get_next_question)
 
 
