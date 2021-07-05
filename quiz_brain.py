@@ -12,6 +12,8 @@ class QuizBrain:
         return self.question_number < len(self.question_list)
 
     def next_question(self):
+        if self.question_number >= len(self.question_list):
+            return False
         self.current_question = self.question_list[self.question_number]
         self.question_number += 1
         q_text = html.unescape(self.current_question.text)
@@ -21,3 +23,5 @@ class QuizBrain:
         correct_answer = self.current_question.answer
         if user_answer.lower() == correct_answer.lower():
             self.score += 1
+            return True
+        return False

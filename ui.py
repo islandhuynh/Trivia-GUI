@@ -33,14 +33,28 @@ class QuizInterface:
 
   def get_next_question(self):
     q_text = self.quiz.next_question()
-    self.question_window.itemconfig(self.question_text, text=q_text)
+    if q_text: 
+      self.question_window.itemconfig(self.question_text, text=q_text)
+    else: 
+      self.question_window.itemconfig(self.question_text, text=f"Quiz finished! Your score is {self.quiz.score}/{len(self.quiz.question_list)}")
+      self.true_button.config(state=DISABLED)
+      self.false_button.config(state=DISABLED)
 
   def answer_true(self):
-    self.quiz.check_answer("True")
-    self.score_label.config(text=f"Score: {self.quiz.score}")
-    self.get_next_question()
+    answered_correctly = self.quiz.check_answer("True")
+    self.display_choice_feedback(answered_correctly)
 
   def answer_false(self):
-    self.quiz.check_answer("False")
-    self.score_label.config(text=f"Score: {self.quiz.score}")
+    answered_correctly = self.quiz.check_answer("False")
+    self.display_choice_feedback(answered_correctly)
+
+  def display_choice_feedback(self, is_correct):
+    if is_correct:
+      self.window.after(0, self.question_window.configure(bg="green"))
+      self.score_label.config(text=f"Score: {self.quiz.score}")
+    else:
+      self.window.after(0, self.question_window.configure(bg="red"))
+    self.window.after(500, self.question_window.configure(bg="blue"))
     self.get_next_question()
+
+
